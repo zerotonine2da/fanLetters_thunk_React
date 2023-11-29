@@ -2,11 +2,11 @@ import React from 'react';
 import Tabs from './Tabs';
 import styled from 'styled-components';
 
-export default function Header({ activeMember, setActiveMember }) {
+export default function Header() {
     return (
         <Container>
             <Title>NewJeans</Title>
-            <Tabs activeMember={activeMember} setActiveMember={setActiveMember}></Tabs>
+            <Tabs></Tabs>
         </Container>
     );
 }

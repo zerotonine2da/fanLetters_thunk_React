@@ -34,6 +34,8 @@ export default function Detail({ letters, setLetters }) {
             }
         });
         setLetters(newLetters);
+        setIsEditing(false);
+        setEditingText('');
     };
 
     return (

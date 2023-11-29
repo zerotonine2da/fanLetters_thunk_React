@@ -10,9 +10,9 @@ export default function Home({ letters, setLetters }) {
 
     return (
         <Container>
-            <Header activeMember={activeMember} setActiveMember={setActiveMember} />
-            <AddForm setLetters={setLetters} />
-            <LetterList activeMember={activeMember} letters={letters} />
+            <Header />
+            <AddForm />
+            <LetterList />
         </Container>
     );
 }

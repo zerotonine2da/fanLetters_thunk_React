@@ -1,13 +1,17 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
+import { setMember } from 'redux/modules/member';
+export default function Tabs() {
+    const activeMember = useSelector((state) => state.member);
+    const dispatch = useDispatch();
 
-export default function Tabs({ activeMember, setActiveMember }) {
     const onActiveMember = (event) => {
         if (event.target === event.currentTarget) {
             // 멤버 버튼 이외의 부분을 클릭시 종료
             return;
         }
-        setActiveMember(event.target.textContent);
+        dispatch(setMember(event.target.textContent));
     };
 
     return (

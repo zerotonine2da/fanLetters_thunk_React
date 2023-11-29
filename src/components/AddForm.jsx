@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { v4 as uuid } from 'uuid';
 import Button from './common/Button';
+import { useDispatch } from 'react-redux';
+import { addLetter } from 'redux/modules/letters';
+export default function AddForm() {
+    const dispatch = useDispatch();
 
-export default function AddForm({ setLetters }) {
     const [nickName, setNickName] = useState('');
     const [content, setContent] = useState('');
     const [member, setMember] = useState('민지');
@@ -22,7 +25,9 @@ export default function AddForm({ setLetters }) {
             writedTo: member,
             id: uuid(),
         };
-        setLetters((prev) => [newLetter, ...prev]);
+        dispatch(addLetter(newLetter));
+        setNickName('');
+        setContent('');
     };
 
     return (
