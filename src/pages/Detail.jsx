@@ -5,8 +5,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { getFormattedDate } from 'util/data';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteLetter } from 'redux/modules/letters';
+import { editLetter } from 'redux/modules/letters';
 
-export default function Detail({ letters, setLetters }) {
+export default function Detail() {
+    const dispatch = useDispatch();
+    const letters = useSelector((state) => state.letters);
+
     const { id } = useParams();
     const navigate = useNavigate();
     //구조분해할당으로 가져옴
@@ -18,10 +24,9 @@ export default function Detail({ letters, setLetters }) {
     const onDeleteBtn = () => {
         const answer = window.confirm('정말로 삭제하시겠습니까');
         if (!answer) return;
-
-        const newLetters = letters.filter((letter) => letter.id !== id);
+        dispatch(deleteLetter(id));
+        //const newLetters = letters.filter((letter) => letter.id !== id);
         navigate('/');
-        setLetters(newLetters);
     };
 
     const onEditDone = () => {
@@ -33,7 +38,7 @@ export default function Detail({ letters, setLetters }) {
                 return item;
             }
         });
-        setLetters(newLetters);
+        dispatch(editLetter({ id, editingText }));
         setIsEditing(false);
         setEditingText('');
     };

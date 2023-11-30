@@ -1,4 +1,6 @@
+import { createSlice } from '@reduxjs/toolkit';
 import fakeData from 'fakeData.json';
+/*
 // 팬레터 추가
 const ADD_LETTER = 'letters/ADD_LETTER';
 // 팬레터 삭제
@@ -15,18 +17,25 @@ export const deleteLetter = (payload) => {
 export const editLetter = (payload) => {
     return { type: EDIT_LETTER, payload };
 };
-
+*/
 const initialState = fakeData;
 
-const letters = (state = initialState, action) => {
-    switch (action.type) {
-        case ADD_LETTER:
+const lettersSlice = createSlice({
+    name: 'letters',
+    initialState,
+    reducers: {
+        addLetter: (state, action) => {
             const newLetter = action.payload;
-            return [newLetter, ...state];
-        case DELETE_LETTER:
+            //기존 리덕스에서는 불변성을 위해서 스프레드로 적용
+            //return [newLetter, ...state];
+            //툴킷에서는 immer 기능이 내장되어있음.
+            state.push(action.payload);
+        },
+        deleteLetter: (state, action) => {
             const letterId = action.payload;
             return state.filter((letter) => letter.id !== letterId);
-        case EDIT_LETTER:
+        },
+        editLetter: (state, action) => {
             const { id, editingText } = action.payload;
             return state.map((letter) => {
                 if (letter.id === id) {
@@ -34,9 +43,9 @@ const letters = (state = initialState, action) => {
                 }
                 return letter;
             });
-        default:
-            return state;
-    }
-};
+        },
+    },
+});
 
-export default letters;
+export const { addLetter, deleteLetter, editLetter } = lettersSlice.actions;
+export default lettersSlice.reducer;

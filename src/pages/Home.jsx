@@ -5,9 +5,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useState } from 'react';
 
-export default function Home({ letters, setLetters }) {
-    const [activeMember, setActiveMember] = useState('민지');
-
+export default function Home() {
     return (
         <Container>
             <Header />
