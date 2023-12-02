@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import Avatar from 'components/common/Avatar';
 import { getFormattedDate } from 'util/data';
+import axios from 'axios';
 
 export default function LetterCard({ letter }) {
     const naviagte = useNavigate();

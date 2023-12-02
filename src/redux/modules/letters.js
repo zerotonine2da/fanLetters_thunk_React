@@ -1,36 +1,40 @@
-import { createSlice } from '@reduxjs/toolkit';
-import fakeData from 'fakeData.json';
-/*
-// 팬레터 추가
-const ADD_LETTER = 'letters/ADD_LETTER';
-// 팬레터 삭제
-const DELETE_LETTER = 'letters/DELETE_LETTER';
-// 팬레터 수정
-const EDIT_LETTER = 'letters/EDIT_LETTER';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 
-export const addLetter = (payload) => {
-    return { type: ADD_LETTER, payload };
+const initialState = {
+    letters: [],
+    isLoading: false,
+    error: null,
+    isError: false,
 };
-export const deleteLetter = (payload) => {
-    return { type: DELETE_LETTER, payload };
-};
-export const editLetter = (payload) => {
-    return { type: EDIT_LETTER, payload };
-};
-*/
-const initialState = fakeData;
+
+export const __getLetters = createAsyncThunk('getLetters', async (payload, thunkAPI) => {
+    try {
+        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/letters`);
+        console.log('response', response.data);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        console.log('error', error);
+        return thunkAPI.rejectWithValue(error);
+    }
+});
+
+export const __addLetters = createAsyncThunk('addLetters', async (payload, thunkAPI) => {
+    try {
+        const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/letters`, payload);
+        console.log('response', response);
+        thunkAPI.dispatch(__getLetters());
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        console.log('error', error);
+        return thunkAPI.rejectWithValue(error);
+    }
+});
 
 const lettersSlice = createSlice({
     name: 'letters',
     initialState,
     reducers: {
-        addLetter: (state, action) => {
-            const newLetter = action.payload;
-            //기존 리덕스에서는 불변성을 위해서 스프레드로 적용
-            //return [newLetter, ...state];
-            //툴킷에서는 immer 기능이 내장되어있음.
-            state.push(action.payload);
-        },
         deleteLetter: (state, action) => {
             const letterId = action.payload;
             return state.filter((letter) => letter.id !== letterId);
@@ -43,6 +47,37 @@ const lettersSlice = createSlice({
                 }
                 return letter;
             });
+        },
+    },
+    extraReducers: {
+        [__getLetters.pending]: (state, action) => {
+            state.isLoading = true;
+            state.isError = false;
+        },
+        [__getLetters.fulfilled]: (state, action) => {
+            state.isLoading = false;
+            state.isError = false;
+            state.letters = action.payload;
+            console.log('letters', action.payload);
+        },
+        [__getLetters.rejected]: (state, action) => {
+            state.isLoading = false;
+            state.isError = true;
+            state.error = action.payload;
+        },
+        [__addLetters.pending]: (state, action) => {
+            state.isLoading = true;
+            state.isError = false;
+        },
+        [__addLetters.fulfilled]: (state, action) => {
+            state.isLoading = false;
+            state.isError = false;
+            state.letters.push(action.payload);
+        },
+        [__addLetters.rejected]: (state, action) => {
+            state.isLoading = false;
+            state.isError = true;
+            state.error = action.payload;
         },
     },
 });

@@ -2,6 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     isLoggin: false,
+    userId: localStorage.getItem('userId'),
+    avatar: localStorage.getItem('avatar'),
+    nickname: localStorage.getItem('nickname'),
 };
 
 const authSlice = createSlice({
@@ -9,11 +12,19 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         login: (state, action) => {
-            console.log('login');
+            const { userId, avatar, nickname, accessToken } = action.payload;
+            localStorage.setItem('accessToken', accessToken);
+            localStorage.setItem('userId', userId);
+            localStorage.setItem('avatar', avatar);
+            localStorage.setItem('nickname', nickname);
             state.isLoggin = true;
+            state.userId = userId;
+            state.avatar = avatar;
+            state.nickname = nickname;
+            state.accessToken = accessToken;
         },
         logout: (state, action) => {
-            console.log('logout');
+            localStorage.clear();
             state.isLoggin = false;
         },
     },

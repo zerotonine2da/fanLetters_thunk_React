@@ -1,33 +1,65 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { login } from 'redux/modules/authSlice';
+import { Cookies } from 'react-cookie';
 
 function Login() {
     const [isMember, setIsMember] = useState(true);
-    const [id, setId] = useState('');
-    const [pw, setPw] = useState('');
+    const [userid, setUserid] = useState('');
+    const [password, setPassword] = useState('');
     const [nickname, setNickname] = useState('');
+
+    const cookies = new Cookies();
 
     const dispatch = useDispatch();
 
-    const [inputValue, setInputValue] = useState({
-        id: '',
-        pw: '',
-        nickname: '',
-    });
-
     //회원가입 : post
-    //newUSEr
     const onNewUserHandler = async () => {
-        setInputValue({ id, pw, nickname });
-        await axios.post(`${process.env.REACT_APP_SERVER_URL}/join`, inputValue);
-        setIsMember(true);
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_AUTH_SERVER_URL}/register`, {
+                id: userid,
+                password,
+                nickname,
+            });
+
+            setIsMember(true);
+        } catch (error) {
+            // alert(error);
+            console.log(error);
+        }
     };
 
-    const onLoginHandler = () => {
-        dispatch(login());
+    //로그인
+    const onLoginHandler = async () => {
+        try {
+            const response = await axios.post(
+                `${process.env.REACT_APP_AUTH_SERVER_URL}/login`,
+                {
+                    id: userid,
+                    password,
+                },
+                {
+                    //headers를 안 넣어서 토큰 안생겼음
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer `,
+                    },
+                    //withCredentials: true, //이게있으면 cors 오류 발생
+                }
+            );
+
+            //로그인 성공시, accessToken을 localStorage에 저장
+            const { accessToken, userId, avatar, nickname } = response.data;
+
+            setUserid('');
+            setPassword('');
+            dispatch(login({ accessToken, userId, avatar, nickname }));
+        } catch (error) {
+            console.log(error.response.data.message);
+            alert(error.response.data.message);
+        }
     };
 
     return (
@@ -36,6 +68,7 @@ function Login() {
                 <StForm
                     onSubmit={(e) => {
                         e.preventDefault();
+
                         isMember ? onLoginHandler() : onNewUserHandler();
                     }}
                 >
@@ -44,16 +77,16 @@ function Login() {
                         minLength={4}
                         maxLength={10}
                         placeholder="아이디(4~10글자)"
-                        value={id}
-                        onChange={(e) => setId(e.target.value)}
+                        value={userid}
+                        onChange={(e) => setUserid(e.target.value)}
                     ></input>
                     <input
                         type="current-password"
                         minLength={4}
                         maxLength={15}
                         placeholder="비밀번호(4~15글자)"
-                        value={pw}
-                        onChange={(e) => setPw(e.target.value)}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                     ></input>
                     {isMember ? (
                         ''
@@ -68,9 +101,14 @@ function Login() {
                     )}
                     <div>
                         {isMember ? (
-                            <LoginBtn disabled={id !== '' && pw !== '' ? false : true}>로그인</LoginBtn>
+                            <LoginBtn type="submit" disabled={userid !== '' && password !== '' ? false : true}>
+                                로그인
+                            </LoginBtn>
                         ) : (
-                            <LoginBtn disabled={id !== '' && pw !== '' && nickname !== '' ? false : true}>
+                            <LoginBtn
+                                type="submit"
+                                disabled={userid !== '' && password !== '' && nickname !== '' ? false : true}
+                            >
                                 회원가입
                             </LoginBtn>
                         )}
