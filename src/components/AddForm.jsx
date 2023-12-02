@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { v4 as uuid } from 'uuid';
 import Button from './common/Button';
 import { useDispatch } from 'react-redux';
-import { addLetter } from 'redux/modules/letters';
 import { __addLetters } from 'redux/modules/letters';
+
 export default function AddForm() {
     const dispatch = useDispatch();
     const nickName = localStorage.getItem('nickname');
+    const id = localStorage.getItem('userId');
+    const avatar = localStorage.getItem('avatar');
+
     const [content, setContent] = useState('');
     const [member, setMember] = useState('민지');
 
@@ -20,10 +22,10 @@ export default function AddForm() {
         const newLetter = {
             createdAt: new Date(),
             nickName,
-            avatar: null,
+            avatar,
             content,
             writedTo: member,
-            id: uuid(),
+            id,
         };
         dispatch(__addLetters(newLetter));
         setContent('');

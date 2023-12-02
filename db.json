@@ -52,6 +52,22 @@
       "content": "11111",
       "writedTo": "민지",
       "id": "355213d4-24ab-4842-a15f-46a611e7002b"
+    },
+    {
+      "createdAt": "2023-12-02T11:23:17.897Z",
+      "nickName": "22222",
+      "avatar": null,
+      "content": "22222",
+      "writedTo": "민지",
+      "id": "72c82567-b12d-4586-8918-3092f0c8451a"
+    },
+    {
+      "createdAt": "2023-12-02T11:27:41.019Z",
+      "nickName": "22222",
+      "avatar": "null",
+      "content": "33",
+      "writedTo": "민지",
+      "id": "22222"
     }
   ]
 }

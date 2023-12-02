@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import lettersAPI from 'api/letters.api';
 import axios from 'axios';
 
 const initialState = {
@@ -10,7 +11,7 @@ const initialState = {
 
 export const __getLetters = createAsyncThunk('getLetters', async (payload, thunkAPI) => {
     try {
-        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/letters`);
+        const response = await lettersAPI.get(`/letters?_sort=createAt&_order=desc`);
         console.log('response', response.data);
         return thunkAPI.fulfillWithValue(response.data);
     } catch (error) {

@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { setAuthAPIAccessToken } from 'api/auth.api';
 
 const initialState = {
     isLoggin: false,
@@ -17,6 +18,9 @@ const authSlice = createSlice({
             localStorage.setItem('userId', userId);
             localStorage.setItem('avatar', avatar);
             localStorage.setItem('nickname', nickname);
+
+            setAuthAPIAccessToken(accessToken);
+
             state.isLoggin = true;
             state.userId = userId;
             state.avatar = avatar;

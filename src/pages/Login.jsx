@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { login } from 'redux/modules/authSlice';
 import { Cookies } from 'react-cookie';
+import authAPI from 'api/auth.api';
 
 function Login() {
     const [isMember, setIsMember] = useState(true);
@@ -34,23 +35,12 @@ function Login() {
     //로그인
     const onLoginHandler = async () => {
         try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_AUTH_SERVER_URL}/login`,
-                {
-                    id: userid,
-                    password,
-                },
-                {
-                    //headers를 안 넣어서 토큰 안생겼음
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer `,
-                    },
-                    //withCredentials: true, //이게있으면 cors 오류 발생
-                }
-            );
+            const response = await authAPI.post(`/login`, {
+                id: userid,
+                password,
+            });
 
-            //로그인 성공시, accessToken을 localStorage에 저장
+            // 로그인 성공시, accessToken을 localStorage에 저장
             const { accessToken, userId, avatar, nickname } = response.data;
 
             setUserid('');
