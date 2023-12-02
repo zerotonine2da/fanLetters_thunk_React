@@ -32,6 +32,19 @@ export const __addLetters = createAsyncThunk('addLetters', async (payload, thunk
     }
 });
 
+export const __editLetters = createAsyncThunk('editLetters', async (payload, thunkAPI) => {
+    try {
+        const response = await axios.patch(`${process.env.REACT_APP_SERVER_URL}/letters/${payload.id}`, {
+            content: payload.editingText,
+        });
+        console.log('response_edit', response);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        console.log('error', error);
+        return thunkAPI.rejectWithValue(error);
+    }
+});
+
 const lettersSlice = createSlice({
     name: 'letters',
     initialState,
@@ -40,15 +53,7 @@ const lettersSlice = createSlice({
             const letterId = action.payload;
             return state.filter((letter) => letter.id !== letterId);
         },
-        editLetter: (state, action) => {
-            const { id, editingText } = action.payload;
-            return state.map((letter) => {
-                if (letter.id === id) {
-                    return { ...letter, content: editingText };
-                }
-                return letter;
-            });
-        },
+        editLetter: (state, action) => {},
     },
     extraReducers: {
         [__getLetters.pending]: (state, action) => {
@@ -59,7 +64,6 @@ const lettersSlice = createSlice({
             state.isLoading = false;
             state.isError = false;
             state.letters = action.payload;
-            console.log('letters', action.payload);
         },
         [__getLetters.rejected]: (state, action) => {
             state.isLoading = false;
@@ -80,8 +84,29 @@ const lettersSlice = createSlice({
             state.isError = true;
             state.error = action.payload;
         },
+
+        [__editLetters.pending]: (state, action) => {
+            state.isLoading = true;
+            state.isError = false;
+        },
+        [__editLetters.fulfilled]: (state, action) => {
+            state.isLoading = false;
+            state.isError = false;
+
+            const { id, editingText } = action.payload;
+
+            const letter = state.letters.find((letter) => letter.id === id);
+            if (letter) {
+                letter.content = editingText;
+            }
+        },
+        [__editLetters.rejected]: (state, action) => {
+            state.isLoading = false;
+            state.isError = true;
+            state.error = action.payload;
+        },
     },
 });
 
-export const { addLetter, deleteLetter, editLetter } = lettersSlice.actions;
+export const { deleteLetter, editLetter } = lettersSlice.actions;
 export default lettersSlice.reducer;

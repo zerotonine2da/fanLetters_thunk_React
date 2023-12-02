@@ -46,28 +46,48 @@
       "userid": "아이디"
     },
     {
-      "createdAt": "2023-12-02T11:18:37.524Z",
-      "nickName": "22222",
-      "avatar": null,
-      "content": "11111",
-      "writedTo": "민지",
-      "id": "355213d4-24ab-4842-a15f-46a611e7002b"
-    },
-    {
-      "createdAt": "2023-12-02T11:23:17.897Z",
-      "nickName": "22222",
-      "avatar": null,
-      "content": "22222",
-      "writedTo": "민지",
-      "id": "72c82567-b12d-4586-8918-3092f0c8451a"
-    },
-    {
-      "createdAt": "2023-12-02T11:27:41.019Z",
+      "createdAt": "2023-12-02T13:46:00.514Z",
       "nickName": "22222",
       "avatar": "null",
-      "content": "33",
+      "content": "ㅋㅋㅋㅋㅋ",
       "writedTo": "민지",
       "id": "22222"
+    },
+    {
+      "createdAt": "2023-12-02T13:49:43.893Z",
+      "nickName": "22222",
+      "avatar": "null",
+      "content": "두번째",
+      "writedTo": "민지",
+      "id": "07337f0c-5b33-4aa5-912b-3ee062a683a8",
+      "userId": "22222"
+    },
+    {
+      "createdAt": "2023-12-02T13:49:47.842Z",
+      "nickName": "22222",
+      "avatar": "null",
+      "content": "2221세번째",
+      "writedTo": "민지",
+      "id": "732eb1ea-852a-4a91-8b1e-b34cd071678b",
+      "userId": "22222"
+    },
+    {
+      "createdAt": "2023-12-02T14:09:19.633Z",
+      "nickName": "22222",
+      "avatar": "null",
+      "content": "하니하니",
+      "writedTo": "하니",
+      "id": "4e03707f-5322-4381-b240-52368d86f58a",
+      "userId": "22222"
+    },
+    {
+      "createdAt": "2023-12-02T14:09:53.278Z",
+      "nickName": "22222",
+      "avatar": "null",
+      "content": "ㅋㅋㅋㅋ",
+      "writedTo": "다니엘",
+      "id": "bd8c1f8c-a808-44f5-be6c-44b4392ca210",
+      "userId": "22222"
     }
   ]
 }

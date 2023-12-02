@@ -3,11 +3,12 @@ import styled from 'styled-components';
 import Button from './common/Button';
 import { useDispatch } from 'react-redux';
 import { __addLetters } from 'redux/modules/letters';
+import { v4 as uuid } from 'uuid';
 
 export default function AddForm() {
     const dispatch = useDispatch();
     const nickName = localStorage.getItem('nickname');
-    const id = localStorage.getItem('userId');
+    const userId = localStorage.getItem('userId');
     const avatar = localStorage.getItem('avatar');
 
     const [content, setContent] = useState('');
@@ -25,7 +26,8 @@ export default function AddForm() {
             avatar,
             content,
             writedTo: member,
-            id,
+            id: uuid(),
+            userId,
         };
         dispatch(__addLetters(newLetter));
         setContent('');

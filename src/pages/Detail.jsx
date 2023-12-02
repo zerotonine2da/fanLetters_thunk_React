@@ -6,17 +6,21 @@ import styled from 'styled-components';
 import { getFormattedDate } from 'util/data';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteLetter } from 'redux/modules/letters';
-import { editLetter } from 'redux/modules/letters';
+import { __editLetters, deleteLetter } from 'redux/modules/letters';
 
 export default function Detail() {
     const dispatch = useDispatch();
-    const letters = useSelector((state) => state.letters);
+    const letters = useSelector((state) => state.letters.letters);
 
     const { id } = useParams();
     const navigate = useNavigate();
+
+    // console.log('Detail letters', letters);
+    // console.log('Detail id', id);
+
     //구조분해할당으로 가져옴
     const { avatar, nickname, createdAt, writedTo, content } = letters.find((letter) => letter.id === id);
+    // console.log(avatar, nickname, createdAt, writedTo, content);
 
     const [isEditing, setIsEditing] = useState(false);
     const [editingText, setEditingText] = useState('');
@@ -31,14 +35,8 @@ export default function Detail() {
 
     const onEditDone = () => {
         if (!editingText) return alert('수정사항이 없습니다.');
-        const newLetters = letters.map((item) => {
-            if (item.id === id) {
-                return { ...item, content: editingText };
-            } else {
-                return item;
-            }
-        });
-        dispatch(editLetter({ id, editingText }));
+
+        dispatch(__editLetters({ id, editingText }));
         setIsEditing(false);
         setEditingText('');
     };

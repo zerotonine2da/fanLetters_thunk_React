@@ -29,6 +29,7 @@ const authSlice = createSlice({
         },
         logout: (state, action) => {
             localStorage.clear();
+            setAuthAPIAccessToken('');
             state.isLoggin = false;
         },
     },
