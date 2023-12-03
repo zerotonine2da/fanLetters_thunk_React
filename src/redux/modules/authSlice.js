@@ -32,8 +32,14 @@ const authSlice = createSlice({
             setAuthAPIAccessToken('');
             state.isLoggin = false;
         },
+        changeNickName: (state, action) => {
+            const nickname = action.payload;
+            console.log(nickname);
+            localStorage.setItem('nickname', nickname);
+            state.nickname = nickname;
+        },
     },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, changeNickName } = authSlice.actions;
 export default authSlice.reducer;

@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { getFormattedDate } from 'util/data';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { __editLetters, deleteLetter } from 'redux/modules/letters';
+import { __deleteLetters, __editLetters } from 'redux/modules/letters';
 
 export default function Detail() {
     const dispatch = useDispatch();
@@ -15,21 +15,19 @@ export default function Detail() {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    // console.log('Detail letters', letters);
-    // console.log('Detail id', id);
-
     //구조분해할당으로 가져옴
-    const { avatar, nickname, createdAt, writedTo, content } = letters.find((letter) => letter.id === id);
-    // console.log(avatar, nickname, createdAt, writedTo, content);
+    const { avatar, nickname, createdAt, writedTo, content, userId } = letters.find((letter) => letter.id === id);
+    const LocalStorageUserId = localStorage.getItem('userId');
 
+    // console.log('LetterUserId', userId);
+    //console.log('LocalStorageUserId', localStorage.getItem('userId'));
     const [isEditing, setIsEditing] = useState(false);
     const [editingText, setEditingText] = useState('');
 
     const onDeleteBtn = () => {
         const answer = window.confirm('정말로 삭제하시겠습니까');
         if (!answer) return;
-        dispatch(deleteLetter(id));
-        //const newLetters = letters.filter((letter) => letter.id !== id);
+        dispatch(__deleteLetters(id));
         navigate('/');
     };
 
@@ -37,8 +35,9 @@ export default function Detail() {
         if (!editingText) return alert('수정사항이 없습니다.');
 
         dispatch(__editLetters({ id, editingText }));
-        setIsEditing(false);
         setEditingText('');
+        setIsEditing(false);
+        navigate('/');
     };
 
     return (
@@ -63,6 +62,7 @@ export default function Detail() {
                     <>
                         <TextArea autoFocus defaultValue={content} onChange={(e) => setEditingText(e.target.value)} />
                         <BtnWrapper>
+                            {}
                             <Button
                                 text="취소"
                                 onClick={() => {
@@ -75,15 +75,21 @@ export default function Detail() {
                 ) : (
                     <>
                         <Content>{content}</Content>
-                        <BtnWrapper>
-                            <Button
-                                text="수정"
-                                onClick={() => {
-                                    setIsEditing(true);
-                                }}
-                            />
-                            <Button text="삭제" onClick={onDeleteBtn} />
-                        </BtnWrapper>
+                        {userId === LocalStorageUserId ? (
+                            <>
+                                <BtnWrapper>
+                                    <Button
+                                        text="수정"
+                                        onClick={() => {
+                                            setIsEditing(true);
+                                        }}
+                                    />
+                                    <Button text="삭제" onClick={onDeleteBtn} />
+                                </BtnWrapper>
+                            </>
+                        ) : (
+                            <></>
+                        )}
                     </>
                 )}
             </DetailWrapper>

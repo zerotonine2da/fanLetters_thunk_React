@@ -1,14 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import LetterCard from './LetterCard';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
 
 export default function LetterList() {
     const activeMember = useSelector((state) => state.member);
     const letters = useSelector((state) => state.letters.letters);
+    //const filteredLetters = letters.filter((letter) => letter.writedTo === activeMember);
 
-    const filteredLetters = letters.filter((letter) => letter.writedTo === activeMember);
+    const { isLoading, error } = useSelector((state) => state.letters);
+
+    const [filteredLetters, setFilteredLetters] = useState([]);
+
+    useEffect(() => {
+        if (!isLoading) {
+            const newFilteredLetters = letters.filter((letter) => letter.writedTo === activeMember);
+            setFilteredLetters(newFilteredLetters);
+        }
+    }, [isLoading, letters, activeMember]);
 
     return (
         <ListWrapper>
