@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { changeNickName } from 'redux/modules/authSlice';
+import { changeNickName, changeProfileImg } from 'redux/modules/authSlice';
 function Profile() {
-    //const accessToken = localStorage.getItem('accessToken');
     const avatar = localStorage.getItem('avatar');
     const nickname = localStorage.getItem('nickname');
     const userId = localStorage.getItem('userId');
 
     const dispatch = useDispatch();
     const [isEdit, setIsEdit] = useState(false);
-    console.log('isEdit', isEdit);
-
     const [changeNickname, setChangeNickName] = useState('');
+
+    const [uploadFile, setUploadFile] = useState(null);
+
     const changeProfile = () => {
         setIsEdit(true);
         dispatch(changeNickName(changeNickname));
@@ -25,10 +25,17 @@ function Profile() {
     const changeDone = () => {
         setIsEdit(false);
         dispatch(changeNickName(changeNickname));
+        dispatch(changeProfileImg(uploadFile));
     };
 
-    const previewImage = () => {
-        //여기서 이미지..
+    const changeImage = (event) => {
+        //input태그에서 선택한 파일 = event.target.files 배열에 담겨있고 첫번째 파일 저장
+        const file = event.target.files[0];
+        //URL 메소드 사용해서 URL 생성
+        //<img>태그에서 이미지 표시 가능
+        const imageUrl = URL.createObjectURL(file);
+
+        setUploadFile(imageUrl);
     };
 
     return (
@@ -36,8 +43,13 @@ function Profile() {
             <StDiv>
                 <h1>프로필 관리</h1>
                 <label>
-                    <figure>{avatar}</figure>
-                    <input onChange={previewImage} type="file" accept="image/*"></input>
+                    {uploadFile ? (
+                        <ProfileImg src={uploadFile} alt="프로필 없음" />
+                    ) : (
+                        <ProfileImg src={avatar} alt="프로필사진" />
+                    )}
+
+                    <input onChange={changeImage} type="file"></input>
                 </label>
                 {isEdit ? (
                     <>
@@ -97,12 +109,8 @@ const StDiv = styled.div`
         font-size: 20px;
     }
 
-    & figure {
-        width: 75px;
-        height: 75px;
-        border-radius: 50%;
-        overflow: hidden;
-        border: 1px solid black;
+    & input[type='file'] {
+        display: none;
     }
 
     & button {
@@ -113,6 +121,14 @@ const StDiv = styled.div`
         font-weight: 600;
         border-radius: 12px;
     }
+`;
+
+const ProfileImg = styled.img`
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid black;
 `;
 
 const BtnWrapper = styled.div`

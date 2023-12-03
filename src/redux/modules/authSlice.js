@@ -34,12 +34,17 @@ const authSlice = createSlice({
         },
         changeNickName: (state, action) => {
             const nickname = action.payload;
-            console.log(nickname);
+
             localStorage.setItem('nickname', nickname);
             state.nickname = nickname;
+        },
+        changeProfileImg: (state, action) => {
+            const avatar = action.payload;
+            localStorage.setItem('avatar', avatar);
+            state.avatar = avatar;
         },
     },
 });
 
-export const { login, logout, changeNickName } = authSlice.actions;
+export const { login, logout, changeNickName, changeProfileImg } = authSlice.actions;
 export default authSlice.reducer;
