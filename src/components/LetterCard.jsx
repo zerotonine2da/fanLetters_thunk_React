@@ -5,7 +5,6 @@ import Avatar from 'components/common/Avatar';
 import { getFormattedDate } from 'util/data';
 
 export default function LetterCard({ letter }) {
-    console.log('왜 안나와', letter);
     const navigate = useNavigate();
 
     return (

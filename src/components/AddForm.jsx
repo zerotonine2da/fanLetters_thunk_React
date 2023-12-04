@@ -7,7 +7,7 @@ import { v4 as uuid } from 'uuid';
 
 export default function AddForm() {
     const dispatch = useDispatch();
-    const nickName = localStorage.getItem('nickname');
+    const nickname = localStorage.getItem('nickname');
     const userId = localStorage.getItem('userId');
     const avatar = localStorage.getItem('avatar');
 
@@ -17,12 +17,12 @@ export default function AddForm() {
     const onAddLetter = (event) => {
         event.preventDefault();
         //유효성검사
-        if (!nickName || !content) return alert('닉네임과 내용은 필수값입니다.');
+        if (!nickname || !content) return alert('닉네임과 내용은 필수값입니다.');
 
         //추가 로직
         const newLetter = {
             createdAt: new Date(),
-            nickName,
+            nickname,
             avatar,
             content,
             writedTo: member,
@@ -30,6 +30,7 @@ export default function AddForm() {
             userId,
         };
         dispatch(__addLetters(newLetter));
+
         setContent('');
     };
 
@@ -37,7 +38,7 @@ export default function AddForm() {
         <Form onSubmit={onAddLetter}>
             <InputWrapper>
                 <label>닉네임: </label>
-                <p>{nickName}</p>
+                <p>{nickname}</p>
             </InputWrapper>
             <InputWrapper>
                 <label>내용: </label>

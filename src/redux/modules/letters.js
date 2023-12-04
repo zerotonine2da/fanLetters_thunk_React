@@ -57,6 +57,21 @@ export const __deleteLetters = createAsyncThunk('deleteLetters', async (payload,
     }
 });
 
+export const __editNickName = createAsyncThunk('editNickName', async (payload, thunkAPI) => {
+    try {
+        console.log('payload', payload.changeNickname);
+        const userId = localStorage.getItem('userId');
+        const response = await axios.patch(`${process.env.REACT_APP_SERVER_URL}/letters?userId=${userId}`, {
+            nickname: payload.changeNickname,
+        });
+        console.log('response_editNickName', response);
+        return thunkAPI.fulfillWithValue(response.data);
+    } catch (error) {
+        console.log('error_editNickName', error);
+        return thunkAPI.rejectWithValue(error);
+    }
+});
+
 const lettersSlice = createSlice({
     name: 'letters',
     initialState,
@@ -125,8 +140,28 @@ const lettersSlice = createSlice({
             state.isError = true;
             state.error = action.payload;
         },
+
+        [__editNickName.pending]: (state, action) => {
+            state.isLoading = true;
+            state.isError = false;
+        },
+        [__editNickName.fulfilled]: (state, action) => {
+            state.isLoading = false;
+            state.isError = false;
+
+            const { id, editingText } = action.payload;
+
+            const letter = state.letters.find((letter) => letter.userId === id);
+            if (letter) {
+                letter.nickname = editingText;
+            }
+        },
+        [__editNickName.rejected]: (state, action) => {
+            state.isLoading = false;
+            state.isError = true;
+            state.error = action.payload;
+        },
     },
 });
 
-export const { deleteLetter, editLetter } = lettersSlice.actions;
 export default lettersSlice.reducer;

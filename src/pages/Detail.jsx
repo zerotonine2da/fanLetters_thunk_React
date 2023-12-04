@@ -19,8 +19,6 @@ export default function Detail() {
     const { avatar, nickname, createdAt, writedTo, content, userId } = letters.find((letter) => letter.id === id);
     const LocalStorageUserId = localStorage.getItem('userId');
 
-    // console.log('LetterUserId', userId);
-    //console.log('LocalStorageUserId', localStorage.getItem('userId'));
     const [isEditing, setIsEditing] = useState(false);
     const [editingText, setEditingText] = useState('');
 

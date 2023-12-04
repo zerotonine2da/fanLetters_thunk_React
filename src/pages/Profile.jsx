@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { changeNickName, changeProfileImg } from 'redux/modules/authSlice';
+import personImg from '../shared/person.png';
+import { __editLetters, __editNickName } from 'redux/modules/letters';
 function Profile() {
     const avatar = localStorage.getItem('avatar');
     const nickname = localStorage.getItem('nickname');
-    const userId = localStorage.getItem('userId');
+    const userid = localStorage.getItem('userId');
 
     const dispatch = useDispatch();
     const [isEdit, setIsEdit] = useState(false);
@@ -15,7 +17,7 @@ function Profile() {
 
     const changeProfile = () => {
         setIsEdit(true);
-        dispatch(changeNickName(changeNickname));
+        // dispatch(changeNickName(changeNickname));
     };
 
     const cancelChange = () => {
@@ -23,12 +25,14 @@ function Profile() {
     };
 
     const changeDone = () => {
-        setIsEdit(false);
         dispatch(changeNickName(changeNickname));
         dispatch(changeProfileImg(uploadFile));
+        dispatch(__editNickName(changeNickname));
+        setIsEdit(false);
     };
 
     const changeImage = (event) => {
+        setIsEdit(true);
         //input태그에서 선택한 파일 = event.target.files 배열에 담겨있고 첫번째 파일 저장
         const file = event.target.files[0];
         //URL 메소드 사용해서 URL 생성
@@ -46,7 +50,7 @@ function Profile() {
                     {uploadFile ? (
                         <ProfileImg src={uploadFile} alt="프로필 없음" />
                     ) : (
-                        <ProfileImg src={avatar} alt="프로필사진" />
+                        <ProfileImg src={personImg} alt="프로필사진" />
                     )}
 
                     <input onChange={changeImage} type="file"></input>
@@ -61,7 +65,7 @@ function Profile() {
                                 setChangeNickName(event.target.value);
                             }}
                         ></input>
-                        <p>{userId}</p>
+                        <p>{userid}</p>
                         <BtnWrapper>
                             <button onClick={cancelChange}> 취소 </button>
                             <button onClick={changeDone}> 수정완료 </button>
@@ -70,7 +74,7 @@ function Profile() {
                 ) : (
                     <>
                         <h2>{nickname}</h2>
-                        <p>{userId}</p>
+                        <p>{userid}</p>
                         <button onClick={changeProfile}> 수정하기 </button>
                     </>
                 )}

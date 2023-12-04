@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { login, logout } from 'redux/modules/authSlice';
 import { __getLetters } from 'redux/modules/letters';
 const { default: Router } = require('shared/Router');
